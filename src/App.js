@@ -30,9 +30,11 @@ function InputArea({ faceId }) {
     console.log(values)
     setIsLoading(true)
     const data = {
-      name: values.name,
-      phone: values.phone,
-      faceId,
+      data:{
+        name: values.name,
+        phone: values.phone,
+        faceId,
+      },
     };
     const option = {
       method: 'post',
