@@ -73,12 +73,23 @@ function InputArea({ faceId }) {
           <Form.Item
             label="Phone"
             name="phone"
+            required
+            rules={[{
+              required: true,
+            }, {
+              pattern: /^[0-9]{10}$/,
+              message: 'Phone number must be 10-digit string'
+            }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Name"
             name="name"
+            required
+            rules={[{
+              required: true,
+            }]}
           >
             <Input />
           </Form.Item>
