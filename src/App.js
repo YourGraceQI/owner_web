@@ -1,8 +1,10 @@
 import './App.css';
 import {
-  Form, Spin, Input, Button, Tag,
+  Form, Spin, Input, Button, Tag, message,
 } from 'antd';
 import { useState } from 'react';
+
+const BACKEND_URL = 'https://73jnka9ln2.execute-api.us-east-1.amazonaws.com/v1';
 
 function TitleArea({ faceId }) {
   return (
@@ -21,12 +23,36 @@ function TitleArea({ faceId }) {
   )
 }
 
-function InputArea() {
+function InputArea({ faceId }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (values) => {
     console.log(values)
     setIsLoading(true)
+    const data = {
+      name: values.name,
+      phone: values.phone,
+      faceId,
+    };
+    const option = {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(BACKEND_URL, option).then(response => {
+      setIsLoading(false)
+      if (response.status === 200) {
+        message.success('Succeed');
+      } else {
+        message.warning('Failed');
+      }
+    }).catch(reason => {
+      message.error(`Error: ${reason}`);
+    })
+
     // TODO: implement submit function to backend
   }
   return (
@@ -71,7 +97,7 @@ function App() {
   const urlParamKey = urlParamContent.split('=')[0];
   const urlParamValue = urlParamContent.split('=')[1];
   if (urlParamKey !== 'faceId' || !urlParamValue) {
-    alert('No faceId Specified!')
+    message.error('No faceId Specified!')
     return null
   }
   return (
@@ -87,7 +113,7 @@ function App() {
         style={{ width: 500 }}
       >
         <TitleArea faceId={urlParamValue} />
-        <InputArea />
+        <InputArea faceId={urlParamValue} />
       </div>
     </div>
   );
