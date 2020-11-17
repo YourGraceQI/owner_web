@@ -4,7 +4,9 @@ import {
 } from 'antd';
 import { useState } from 'react';
 
-const BACKEND_URL = 'https://73jnka9ln2.execute-api.us-east-1.amazonaws.com/v1';
+//const BACKEND_URL = 'https://73jnka9ln2.execute-api.us-east-1.amazonaws.com/v1';
+const BACKEND_URL = 'https://ws0zvb23ge.execute-api.us-west-2.amazonaws.com/v1';
+
 
 function TitleArea({ faceId }) {
   return (
