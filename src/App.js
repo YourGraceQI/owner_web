@@ -4,9 +4,7 @@ import {
 } from 'antd';
 import { useState } from 'react';
 
-//const BACKEND_URL = 'https://73jnka9ln2.execute-api.us-east-1.amazonaws.com/v1';
 const BACKEND_URL = 'https://ws0zvb23ge.execute-api.us-west-2.amazonaws.com/v1';
-
 
 function TitleArea({ faceId }) {
   return (
@@ -32,7 +30,7 @@ function InputArea({ faceId }) {
     console.log(values)
     setIsLoading(true)
     const data = {
-      data:{
+      data: {
         name: values.name,
         phone: values.phone,
         faceId,
@@ -46,16 +44,31 @@ function InputArea({ faceId }) {
       },
       body: JSON.stringify(data),
     };
-    fetch(BACKEND_URL, option).then(response => {
-      setIsLoading(false)
-      if (response.status === 200) {
-        message.success('Succeed');
-      } else {
-        message.warning('Failed');
-      }
-    }).catch(reason => {
-      message.error(`Error: ${reason}`);
-    })
+    fetch(BACKEND_URL, option)
+      .then(response => {
+        setIsLoading(false)
+        if (response.status === 200) {
+          return response.text();
+        } else {
+          return '{"errorType": "unknown error"}';
+        }
+      })
+      .then(text => {
+        let jsonData = {}
+        try {
+          jsonData = JSON.parse(text);
+        } catch (error) {
+          message.success('Succeed');
+        }
+        if (jsonData.errorType) {
+          message.warning('Internal Error. Please contact admin.');
+        } else {
+          message.success('Succeed');
+        }
+      })
+      .catch(reason => {
+        message.error(`Error: ${reason}`);
+      })
 
     // TODO: implement submit function to backend
   }
